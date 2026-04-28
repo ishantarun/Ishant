@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 APIs Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>HTML5 APIs Practical</h1>
+    <p>Drag & Drop, Geolocation, Web Storage</p>
+</header>
+
+<section class="box">
+    <h2>1. Drag and Drop</h2>
+
+    <div id="dragBox" draggable="true" ondragstart="drag(event)">
+        Drag Me
+    </div>
+
+    <div id="dropZone" ondrop="drop(event)" ondragover="allowDrop(event)">
+        Drop Here
+    </div>
+</section>
+
+<section class="box">
+    <h2>2. Geolocation</h2>
+    <button onclick="getLocation()">Get Location</button>
+    <p id="locationText">Click button to get location.</p>
+</section>
+
+<section class="box">
+    <h2>3. Web Storage</h2>
+
+    <input type="text" id="username" placeholder="Enter Name">
+    <button onclick="saveData()">Save</button>
+    <button onclick="loadData()">Load</button>
+    <button onclick="removeData()">Remove</button>
+
+    <p id="storageText"></p>
+</section>
+
+<script>
+/* Drag and Drop */
+function allowDrop(ev){
+    ev.preventDefault();
+}
+
+function drag(ev){
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev){
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+
+/* Geolocation */
+function getLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        document.getElementById("locationText").innerHTML = "Geolocation not supported.";
+    }
+}
+
+function showPosition(position){
+    document.getElementById("locationText").innerHTML =
+    "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+function showError(){
+    document.getElementById("locationText").innerHTML =
+    "Unable to fetch location.";
+}
+
+/* Web Storage */
+function saveData(){
+    let name = document.getElementById("username").value;
+    localStorage.setItem("userName", name);
+    document.getElementById("storageText").innerHTML = "Data Saved!";
+}
+
+function loadData(){
+    let data = localStorage.getItem("userName");
+    document.getElementById("storageText").innerHTML = "Stored Name: " + data;
+}
+
+function removeData(){
+    localStorage.removeItem("userName");
+    document.getElementById("storageText").innerHTML = "Data Removed!";
+}
+</script>
+
+</body>
+</html>
+/* style.css */
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f2f6fc;
+}
+
+header{
+    background:#0077b6;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.box{
+    background:white;
+    margin:20px;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h2{
+    color:#0077b6;
+}
+
+#dragBox{
+    width:120px;
+    padding:15px;
+    text-align:center;
+    background:#00b4d8;
+    color:white;
+    border-radius:8px;
+    cursor:grab;
+    margin-bottom:15px;
+}
+
+#dropZone{
+    width:250px;
+    height:120px;
+    border:2px dashed #0077b6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#555;
+    border-radius:10px;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    border:none;
+    background:#0077b6;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#023e8a;
+}
+
+input{
+    padding:10px;
+    width:220px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
